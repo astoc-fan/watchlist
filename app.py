@@ -1,8 +1,8 @@
-from flask import Flask, render_template
-from flask import url_for, escape
-from flask_sqlalchemy import SQLAlchemy
 import os
+
 import click
+from flask import Flask, render_template
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
@@ -69,3 +69,9 @@ def index():
     user = User.query.first()
     movies = Movie.query.all()
     return render_template('index.html', user=user, movies=movies)
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    user = User.query.first()
+    return render_template('404.html', user=user), 404
