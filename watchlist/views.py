@@ -60,6 +60,32 @@ def delete(movie_id):
     return redirect(url_for('index'))
 
 
+@app.route('/delete_select', methods=['POST'])
+@login_required
+def delete_select():
+    selects = request.form.getlist('checks')
+    for select in selects:
+        movie = Movie.query.get(select)
+        db.session.delete(movie)
+    db.session.commit()
+    # db.session.query(Movie).filter(Movie.id.in_(selects)).delete()
+    # db.session.commit()
+    flash(selects)
+    return redirect(url_for('index'))
+
+
+@app.route('/update_select', methods=['POST'])
+@login_required
+def update_select():
+    selects = request.form.getlist('checks')
+    for select in selects:
+        movie = Movie.query.get(select)
+        movie.year = '9999'
+    db.session.commit()
+    flash('Items updated!')
+    return redirect(url_for('index'))
+
+
 @app.route('/settings', methods=['GET', 'POST'])
 @login_required
 def settings():
